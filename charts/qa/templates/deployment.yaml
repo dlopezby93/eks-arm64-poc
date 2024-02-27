@@ -1,0 +1,175 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.serviceName }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- if eq .Values.environment "develop" }}
+    tags.datadoghq.com/env: dev
+    {{- else if eq .Values.environment "stage" }}
+    tags.datadoghq.com/env: stg
+    {{- else if eq .Values.environment "qa" }}
+    tags.datadoghq.com/env: qa
+    {{- else if eq .Values.environment "prod" }}
+    tags.datadoghq.com/env: prod
+    {{- else }}
+    tags.datadoghq.com/env: {{ .Values.environment }}
+    {{- end }}
+    env: {{ .Values.environment }}
+    app: {{ .Values.serviceName }}
+    tags.datadoghq.com/service: {{ .Values.serviceName }}
+    tags.datadoghq.com/version: {{ .Values.version | quote }}
+    admission.datadoghq.com/enabled: "true"
+
+    {{- if eq .Values.lang "java" }}
+    admission.datadoghq.com/java-lib.version: "v1.14.0"
+    {{- else if eq .Values.lang "python" }}
+    admission.datadoghq.com/python-lib.version: "1.12.4"
+    {{- else if eq .Values.lang "node" }}
+    admission.datadoghq.com/js-lib.version: "3.19.0"
+    {{- else if eq .Values.lang "ruby" }}
+    admission.datadoghq.com/ruby-lib.version: "1.11.1"
+    {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Values.serviceName }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      labels:
+        {{- if eq .Values.environment "develop" }}
+        tags.datadoghq.com/env: dev
+        {{- else if eq .Values.environment "stage" }}
+        tags.datadoghq.com/env: stg
+        {{- else if eq .Values.environment "qa" }}
+        tags.datadoghq.com/env: qa
+        {{- else if eq .Values.environment "prod" }}
+        tags.datadoghq.com/env: prod
+        {{- else }}
+        tags.datadoghq.com/env: {{ .Values.environment }}
+        {{- end }}
+        env: {{ .Values.environment }}
+        app: {{ .Values.serviceName }}
+        tags.datadoghq.com/service: {{ .Values.serviceName }}
+        tags.datadoghq.com/version: {{ .Values.version | quote }}
+        admission.datadoghq.com/enabled: "true"
+
+    spec:
+
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ .Values.serviceName }}
+      {{- end }}
+
+      {{- if .Values.secrets }}
+      volumes:
+      - name: {{ .Values.serviceName }}
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ .Values.serviceName }}
+      {{- end }}
+
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}
+
+      containers:
+      - name: {{ .Values.serviceName }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 0
+        ports:
+        {{- if eq .Values.service.protocol "http" }}
+        - name: http
+          containerPort: {{ .Values.service.port }}
+          protocol: TCP
+      #  - name: grpc                                          #lineas 96 - 98 se usan para servicios por grpc
+      #   containerPort: {{ .Values.service.grpcPort }}
+      #    protocol: TCP
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: http
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: http
+        {{- else if eq .Values.service.protocol "grpc" }}
+        - containerPort: {{ .Values.service.port }}
+        livenessProbe:
+          grpc:
+            port: {{ .Values.service.port }}
+        {{- end }}
+
+        {{- if .Values.secrets }}
+        volumeMounts:
+        - name: {{ .Values.serviceName }}
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+        {{- end }}
+
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+
+        envFrom:
+        - configMapRef:
+            name: {{ .Values.serviceName }}-configmap
+        {{- if .Values.secrets }}
+        - secretRef:
+            name: {{ .Values.serviceName }}
+        {{- end }}
+
+        env:
+        {{- if eq .Values.lang "node" }}
+          - name: DD_AGENT_HOST
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: DD_PROFILING_ENABLED
+            value: "true"
+          - name: DD_LOGS_INJECTION
+            value: "true"
+        {{- else if eq .Values.lang "python" }}
+          - name: DD_PROFILING_ENABLED
+            value: "true"
+          - name: DD_LOGS_INJECTION
+            value: "true"
+        {{- else if eq .Values.lang "ruby" }}
+          - name: DD_AGENT_HOST
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: DD_ENV
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/env']
+          - name: DD_SERVICE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/service']
+          - name: DD_VERSION
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/version']
+          - name: DD_PROFILING_ENABLED
+            value: "true"
+        {{- else if eq .Values.lang "java" }}
+          - name: DD_AGENT_HOST
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: DD_PROFILING_ENABLED
+            value: "true"
+          - name: DD_LOGS_INJECTION
+            value: "true"
+        {{- end }}

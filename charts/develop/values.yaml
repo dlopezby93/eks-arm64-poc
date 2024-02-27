@@ -1,0 +1,62 @@
+# General 
+serviceName: tr-spin-catalogue-svc-backend-java-gradle-kubernetes
+svcName: catalogue-service
+version: 0.0.1
+environment: develop
+namespace: demo-app # NO CAMBIAR - PROBLEMAS CON "Secrets Store CSI drive" & "AWS provider for the Secrets Store CSI Driver" 
+lang: java
+exposeService:
+  enabled: true
+  path: "/catalogue-service" # Example -> path: "/dummy"
+# Deployment
+replicaCount: 1
+image:
+  repository: ghcr.io/fintechdigitalventure/sbo-catalog-arm64
+  pullPolicy: IfNotPresent
+  tag: latest
+  preTags:
+    "-1": 1.0.0-3824901-1705946294
+    "-2": "1.0.0-bbcc524-1702588120"
+    "-3": "1.0.0-3e6c421-1697146784"
+port: 80
+resources:
+  limits:
+    cpu: 500m
+    memory: 1024Mi
+  requests:
+    cpu: 500m
+    memory: 1024Mi
+# Pod
+podAnnotations: {"linkerd.io/inject": "enabled"}
+imagePullSecrets: regcred
+# HPA
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 95
+  targetMemoryUtilizationPercentage: 95
+# Service 
+service:
+  protocol: http # http | grpc
+  port: 9014
+  healthCheck: "/catalogue-service/actuator/health"
+# Service Account
+serviceAccount:
+  create: true
+  annotations: {}
+# Canary 
+canary:
+  enabled: false
+  skipAnalysis: false
+  analysis:
+    interval: 30s
+    stepWeight: 50
+    maxWeight: 100
+    threshold: 2
+# AWS Secrets to add
+# Example
+# secrets: ["secret_1", "secret_2", ..., "secret_n"]
+secrets: ["AWS_REGION", "KYC_SERVICE_BASE_URL", "TREND_AP_KEY", "AWS_COGNITO_JWKS", "MONGODB_READ_PREFERENCE", "FEATURE_CONFIGCAT_APIKEY", "TREND_AP_SECRET", "PAGOPOP_SERVICE_API_KEY", "MONGODB_URI_CATALOGUE", "FEATURE_CONFIGCAT_MEMORY_MAP", "FEATURE_CACHE_ENABLED", "SPRING_REDIS_HOST", "LOG_LEVEL", "ENABLE_CIRCUIT_BREAKER", "FEATURE_CONFIGCAT_ENABLED", "SPRING_REDIS_PORT", "PAGOPOP_SERVICE_ADMIN_API_KEY"]
+# Environment variables (not secrets)
+env_vars: {"ENV": "dev", "PROFILES_LABEL": "dev"}

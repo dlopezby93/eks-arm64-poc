@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.serviceName }}
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: {{ .Values.service.healthCheck }}
+  labels:
+    app: {{ .Values.serviceName }}
+    env: {{ .Values.environment }}
+spec:
+  {{- if .Values.exposeService }}
+  type: NodePort
+  {{- else }}
+  type: ClusterIP
+  {{- end }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ .Values.serviceName }}

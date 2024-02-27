@@ -1,0 +1,9 @@
+{{- $namespace := lookup "v1" "Namespace" "" .Values.namespace }}
+{{- if empty $namespace }}
+{{- if ne .Values.namespace "default" }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespace }}
+{{- end }}
+{{- end }}

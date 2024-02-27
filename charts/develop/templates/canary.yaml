@@ -1,0 +1,45 @@
+{{- if .Values.canary.enabled -}}
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: {{ .Values.serviceName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  # deployment reference
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.serviceName }}
+  # the maximum time in seconds for the canary deployment
+  # to make progress before it is rollback (default 600s)
+  progressDeadlineSeconds: 180
+  service:
+    # ClusterIP port number
+    port: {{ .Values.service.port }}
+    # container port number or name (optional)
+    targetPort: {{ .Values.service.port }}
+  analysis:
+    # schedule interval (default 60s)
+    interval: {{ .Values.canary.analysis.interval }}
+    # canary increment step percentage (0-100)
+    stepWeight: {{ .Values.canary.analysis.stepWeight }}
+    # max traffic percentage routed to canary percentage (0-100)
+    maxWeight: {{ .Values.canary.analysis.maxWeight }}
+    # max number of failed metric checks before rollback
+    threshold: {{ .Values.canary.analysis.threshold }}
+    # Linkerd Prometheus checks
+    metrics:
+      - name: request-success-rate
+        # minimum req success rate (non 5xx responses)
+        # percentage (0-100)
+        thresholdRange:
+          min: 99
+        interval: 30s
+      - name: request-duration
+        # maximum req duration P99
+        # milliseconds
+        thresholdRange:
+          max: 500
+        interval: 30s
+  skipAnalysis: {{ .Values.canary.skipAnalysis }}
+{{- end }}

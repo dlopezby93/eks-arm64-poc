@@ -1,0 +1,61 @@
+# General 
+serviceName: tr-spin-catalogue-svc-backend-java-gradle-kubernetes
+version: 0.0.1
+environment: qa
+namespace: default # NO CAMBIAR - PROBLEMAS CON "Secrets Store CSI drive" & "AWS provider for the Secrets Store CSI Driver" 
+lang: java
+exposeService:
+  enabled: false
+  path: "" # Example -> path: "/dummy"
+# Deployment
+replicaCount: 1
+image:
+  repository: ghcr.io/fintechdigitalventure/tr-spin-catalogue-svc-backend-java-gradle
+  pullPolicy: IfNotPresent
+  tag: 1.0.0-ddc9e41-1706806254
+  preTags:
+    "-1": 1.0.0-2739c1b-1706066149
+    "-2": "1.0.0-8a4a73a-1705953682"
+    "-3": "latest"
+port: 80
+resources:
+  limits:
+    cpu: 500m
+    memory: 1024Mi
+  requests:
+    cpu: 500m
+    memory: 1024Mi
+# Pod
+podAnnotations: {"linkerd.io/inject": "enabled"}
+imagePullSecrets: regcred
+# HPA
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 95
+  targetMemoryUtilizationPercentage: 95
+# Service 
+service:
+  protocol: http # http | grpc
+  port: 80
+  healthCheck: "/healthz"
+# Service Account
+serviceAccount:
+  create: true
+  annotations: {}
+# Canary 
+canary:
+  enabled: false
+  skipAnalysis: false
+  analysis:
+    interval: 30s
+    stepWeight: 50
+    maxWeight: 100
+    threshold: 2
+# AWS Secrets to add
+# Example
+# secrets: ["secret_1", "secret_2", ..., "secret_n"]
+secrets: []
+# Environment variables (not secrets)
+env_vars: {"EXAMPLE": "my_example"}
