@@ -44,7 +44,7 @@ service:
 # Service Account
 serviceAccount:
   create: true
-  annotations: {}
+  annotations: {"eks.amazonaws.com/role-arn": "arn:aws:iam::801163581808:role/backend-services-cluster-demo-cluster-20230525191223336300000005"}
 # Canary 
 canary:
   enabled: false
