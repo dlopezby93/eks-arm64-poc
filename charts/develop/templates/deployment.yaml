@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: {{ .Values.serviceName }}
   namespace: {{ .Values.namespace }}
+  nodeSelector:
+        kubernetes.io/arch: arm64
   labels:
     {{- if eq .Values.environment "develop" }}
     tags.datadoghq.com/env: dev
