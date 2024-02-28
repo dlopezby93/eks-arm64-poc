@@ -81,8 +81,8 @@ spec:
             secretProviderClass: {{ .Values.serviceName }}
       {{- end }}
 
-      imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets }}
+      # imagePullSecrets:
+      #   - name: {{ .Values.imagePullSecrets }}
 
       containers:
       - name: {{ .Values.serviceName }}
