@@ -13,7 +13,7 @@ replicaCount: 1
 image:
   repository: dlopezby93/go-arch-x #ghcr.io/fintechdigitalventure/sbo-catalog-arm64
   pullPolicy: IfNotPresent
-  tag: '1.0'
+  tag: arm64
   preTags:
     "-1": 1.0.0-3824901-1705946294
     "-2": "1.0.0-bbcc524-1702588120"
