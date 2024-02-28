@@ -11,7 +11,7 @@ exposeService:
 # Deployment
 replicaCount: 1
 image:
-  repository: dlopezby93/go-arch-x #ghcr.io/fintechdigitalventure/sbo-catalog-arm64
+  repository: dlopezby93/go-arch-eks #ghcr.io/fintechdigitalventure/sbo-catalog-arm64
   pullPolicy: IfNotPresent
   tag: arm64
   preTags:
