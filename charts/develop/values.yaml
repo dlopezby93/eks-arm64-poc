@@ -11,7 +11,7 @@ exposeService:
 # Deployment
 replicaCount: 1
 image:
-  repository: ghcr.io/fintechdigitalventure/sbo-catalog-arm64 #ghcr.io/fintechdigitalventure/sbo-catalog-arm64
+  repository: dlopezby93/sbo-catalog-arm64 #ghcr.io/fintechdigitalventure/sbo-catalog-arm64
   pullPolicy: IfNotPresent
   tag: latest
   preTags:
