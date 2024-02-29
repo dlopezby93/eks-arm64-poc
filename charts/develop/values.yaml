@@ -1,6 +1,6 @@
 # General 
-serviceName: tr-spin-catalogue-svc-backend-java-gradle-kubernetes
-svcName: catalogue-service
+serviceName: tr-spin-catalogue-svc-backend-java-gradle-kubernetes-arm64
+svcName: catalogue-service-arm64
 version: 0.0.1
 environment: develop
 namespace: default # NO CAMBIAR - PROBLEMAS CON "Secrets Store CSI drive" & "AWS provider for the Secrets Store CSI Driver" 
