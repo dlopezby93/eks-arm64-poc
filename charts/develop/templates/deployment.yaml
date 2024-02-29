@@ -83,7 +83,10 @@ spec:
 
       # imagePullSecrets:
       #   - name: {{ .Values.imagePullSecrets }}
-
+      tolerations:
+      - key: "taint-genesys"
+        operator: "graviton-test"
+        effect: "NoSchedule"
       containers:
       - name: {{ .Values.serviceName }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

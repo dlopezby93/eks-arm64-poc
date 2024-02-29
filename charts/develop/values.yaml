@@ -3,7 +3,7 @@ serviceName: tr-spin-catalogue-svc-backend-java-gradle-kubernetes
 svcName: catalogue-service
 version: 0.0.1
 environment: develop
-namespace: demo-app # NO CAMBIAR - PROBLEMAS CON "Secrets Store CSI drive" & "AWS provider for the Secrets Store CSI Driver" 
+namespace: default # NO CAMBIAR - PROBLEMAS CON "Secrets Store CSI drive" & "AWS provider for the Secrets Store CSI Driver" 
 lang: java
 exposeService:
   enabled: true
@@ -44,7 +44,7 @@ service:
 # Service Account
 serviceAccount:
   create: true
-  annotations: {"eks.amazonaws.com/role-arn": "arn:aws:iam::801163581808:role/sbo-catalog-arm64-role"}
+  annotations: {"eks.amazonaws.com/role-arn": "arn:aws:iam::766717554267:role/tr-spin-catalogue-svc-backend-java-gradle-kubernetes-develop"}
 # Canary 
 canary:
   enabled: false
