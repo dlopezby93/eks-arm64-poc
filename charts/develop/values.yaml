@@ -1,5 +1,6 @@
 # General 
-serviceName: tr-spin-catalogue-svc-backend-java-gradle-kubernetes
+serviceName: tr-spin-catalogue-svc-backend-java-kubernetes-arm
+serviceSecretName: tr-spin-catalogue-svc-backend-java-gradle-kubernetes
 svcName: catalogue-service-arm64
 version: 0.0.1
 environment: develop
