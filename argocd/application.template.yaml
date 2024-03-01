@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: sbo-catalog-arm64
+  name: sbo-catalog-k8s-arm64
   namespace: argocd
 spec:
   project: default
