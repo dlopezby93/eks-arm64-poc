@@ -113,7 +113,7 @@ spec:
 
         {{- if .Values.secrets }}
         volumeMounts:
-        - name: {{ .Values.serviceName }}
+        - name: {{ .Values.serviceSecretName }}
           mountPath: "/mnt/secrets-store"
           readOnly: true
         {{- end }}
