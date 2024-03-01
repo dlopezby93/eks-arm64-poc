@@ -131,7 +131,7 @@ spec:
             name: {{ .Values.serviceName }}-configmap
         {{- if .Values.secrets }}
         - secretRef:
-            name: {{ .Values.serviceName }}
+            name: {{ .Values.serviceSecretName }}
         {{- end }}
 
         env:
