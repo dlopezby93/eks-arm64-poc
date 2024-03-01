@@ -71,7 +71,7 @@ spec:
 
       {{- if .Values.secrets }}
       volumes:
-      - name: {{ .Values.serviceName }}
+      - name: {{ .Values.serviceSecretName }}
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
