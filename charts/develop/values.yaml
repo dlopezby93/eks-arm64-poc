@@ -45,7 +45,7 @@ service:
 # Service Account
 serviceAccount:
   create: true
-  annotations: {"eks.amazonaws.com/role-arn": "arn:aws:iam::766717554267:role/tr-spin-catalogue-svc-backend-java-gradle-k8s-arm64-develop"}
+  annotations: {"eks.amazonaws.com/role-arn": "arn:aws:iam::766717554267:role/tr-spin-catalogue-svc-backend-java-gradle-kubernetes-develop"}
 # Canary 
 canary:
   enabled: false
