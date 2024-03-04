@@ -57,7 +57,7 @@ canary:
     threshold: 2
 # Restart deployment cronjob
 restartDeployment:
-  enabled: false
+  enabled: true
   schedule: 0 1 * * *
 # AWS Secrets to add
 # Example
