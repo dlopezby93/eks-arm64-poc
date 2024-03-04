@@ -2,15 +2,15 @@
 kind: ServiceAccount
 apiVersion: v1
 metadata:
-  name: restart-deploy
-  namespace: default
+  name: restart-deployment
+  namespace: {{ .Values.namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: restart-deployment
-  namespace: default
+  namespace: {{ .Values.namespace }}
 rules:
   - apiGroups: ["apps", "extensions"]
     resources: ["deployments"]
@@ -22,7 +22,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: restart-deployment
-  namespace: default
+  namespace: {{ .Values.namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -30,14 +30,14 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: restart-deployment
-    namespace: default
+    namespace: {{ .Values.namespace }}
 
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: restart-deployment
-  namespace: default
+  namespace: {{ .Values.namespace }}
 spec:
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 2
@@ -58,4 +58,4 @@ spec:
                 - 'kubectl'
                 - 'rollout'
                 - 'restart'
-                - 'deployment/tr-spin-catalogue-svc-backend-java-kubernetes-arm'
+                - 'deployment/{{ .tr-spin-catalogue-svc-backend-java-kubernetes-arm }}'
