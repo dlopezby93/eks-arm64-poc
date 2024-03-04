@@ -58,4 +58,4 @@ spec:
                 - 'kubectl'
                 - 'rollout'
                 - 'restart'
-                - 'deployment/{{ .tr-spin-catalogue-svc-backend-java-kubernetes-arm }}'
+                - 'deployment/tr-spin-catalogue-svc-backend-java-kubernetes-arm'
