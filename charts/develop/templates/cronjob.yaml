@@ -37,7 +37,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: restart-deployment
-  namespace: testns
+  namespace: default
 spec:
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 2
