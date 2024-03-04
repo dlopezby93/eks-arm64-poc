@@ -14,7 +14,7 @@ metadata:
 rules:
   - apiGroups: ["apps", "extensions"]
     resources: ["deployments"]
-    resourceNames: ["tr-spin-catalogue-svc-backend-java-kubernetes-arm"]
+    resourceNames: ["{{ .Values.serviceName }}"]
     verbs: ["get", "patch", "list", "watch"]
 
 ---
@@ -53,10 +53,9 @@ spec:
           restartPolicy: Never
           containers:
             - name: kubectl
-              image: bitnami/kubectl 
+              image: bitnami/kubectl
               command:
                 - 'kubectl'
                 - 'rollout'
                 - 'restart'
                 - 'deployment/{{ .Values.serviceName }}'
-                #- 'deployment/tr-spin-catalogue-svc-backend-java-kubernetes-arm'
