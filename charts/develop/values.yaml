@@ -55,6 +55,10 @@ canary:
     stepWeight: 50
     maxWeight: 100
     threshold: 2
+# Restart deployment cronjob
+restartDeployment:
+  enabled: true
+  schedule: 0 1 * * *
 # AWS Secrets to add
 # Example
 # secrets: ["secret_1", "secret_2", ..., "secret_n"]

@@ -1,3 +1,4 @@
+{{- if .Values.restartDeployment.enabled -}}
 ---
 kind: ServiceAccount
 apiVersion: v1
@@ -39,14 +40,14 @@ metadata:
   name: restart-deployment
   namespace: {{ .Values.namespace }}
 spec:
-  successfulJobsHistoryLimit: 1
-  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 5
   concurrencyPolicy: Forbid
-  schedule: '0 1 * * *'
+  schedule: {{ .Values.restartDeployment.schedule }}
   jobTemplate:
     spec:
-      backoffLimit: 2 
-      activeDeadlineSeconds: 600 
+      backoffLimit: 3
+      activeDeadlineSeconds: 600
       template:
         spec:
           serviceAccountName: restart-deployment
@@ -59,3 +60,4 @@ spec:
                 - 'rollout'
                 - 'restart'
                 - 'deployment/{{ .Values.serviceName }}'
+{{- end }}
