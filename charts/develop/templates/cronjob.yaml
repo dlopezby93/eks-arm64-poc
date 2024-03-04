@@ -58,5 +58,5 @@ spec:
                 - 'kubectl'
                 - 'rollout'
                 - 'restart'
-                - '{{- printf "%s/%s" deployment .Values.serviceName -}}'
+                - 'deployment/{{ .Values.serviceName }}'
                 #- 'deployment/tr-spin-catalogue-svc-backend-java-kubernetes-arm'
