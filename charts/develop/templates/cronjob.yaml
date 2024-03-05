@@ -44,6 +44,7 @@ spec:
   failedJobsHistoryLimit: 5
   concurrencyPolicy: Forbid
   schedule: {{ .Values.restartDeployment.schedule }}
+  timeZone: 'America/Mexico_City'
   jobTemplate:
     spec:
       backoffLimit: 3
