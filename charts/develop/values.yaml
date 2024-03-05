@@ -58,7 +58,7 @@ canary:
 # Restart deployment cronjob
 restartDeployment:
   enabled: true
-  schedule: 0 1 * * *
+  schedule: 45 10 * * *
 # AWS Secrets to add
 # Example
 # secrets: ["secret_1", "secret_2", ..., "secret_n"]
