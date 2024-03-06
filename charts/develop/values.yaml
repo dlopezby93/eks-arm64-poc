@@ -12,7 +12,7 @@ exposeService:
 # Deployment
 replicaCount: 1
 image:
-  repository: dlopezby93/catalog-arm-temp-2 #ghcr.io/fintechdigitalventure/sbo-catalog-arm64
+  repository: dlopezby93/jce-hsm #dlopezby93/catalog-arm-temp-2 #ghcr.io/fintechdigitalventure/sbo-catalog-arm64
   pullPolicy: IfNotPresent
   tag: arm64
   preTags:
