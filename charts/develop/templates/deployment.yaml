@@ -70,8 +70,8 @@ spec:
       {{- end }}
 
       {{- if .Values.secrets }}
-      nodeSelector:
-        kubernetes.io/arch: arm64
+      # nodeSelector:
+      #   kubernetes.io/arch: arm64
       volumes:
       - name: {{ .Values.serviceSecretName }}
         csi:
