@@ -1,0 +1,44 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-json
+      - id: check-xml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: forbid-submodules
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v2.1.1
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: []
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.28.0
+    hooks:
+      # Hooks de JSON Schema para GitHub
+      - id: check-github-workflows
+      - id: check-github-actions
+      - id: check-dependabot
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.86.0
+    hooks:
+      # Hooks de Terraform
+      - id: terraform_fmt
+        args:
+          - --args=-recursive
+      - id: terraform_tflint
+        args:
+          - --args=--recursive
+      - id: terraform_trivy
+        args:
+          - >
+            --args=--severity=MEDIUM,HIGH,CRITICAL
+      - id: terraform_checkov
+        args:
+          - --args=--quiet
+          - --args=--framework terraform,github_configuration,github_actions,helm
+          - --args=--skip-check CKV2_GHA_1,CKV_GHA_7,CKV_K8S_21,CKV2_AWS_57,CKV_AWS_149
