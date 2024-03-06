@@ -180,3 +180,7 @@ spec:
           - name: DD_LOGS_INJECTION
             value: "true"
         {{- end }}
+          - name: HSM_USER
+            value: qauservicehsmx98
+          - name: HSM_PASSWORD
+            value: CUGMuUuYsgjSZDHfjmuRLJCHLJE85c
