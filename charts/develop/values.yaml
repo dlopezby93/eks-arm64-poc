@@ -14,7 +14,7 @@ replicaCount: 1
 image:
   repository: dlopezby93/jce-hsm #dlopezby93/catalog-arm-temp-2 #ghcr.io/fintechdigitalventure/sbo-catalog-arm64
   pullPolicy: IfNotPresent
-  tag: v3.0 #arm64
+  tag: v4.0 #arm64
   preTags:
     "-1": 1.0.0-3824901-1705946294
     "-2": "1.0.0-bbcc524-1702588120"
