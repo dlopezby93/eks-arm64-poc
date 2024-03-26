@@ -70,8 +70,8 @@ spec:
       {{- end }}
 
       {{- if .Values.secrets }}
-      # nodeSelector:
-      #   kubernetes.io/arch: arm64
+      nodeSelector:
+        kubernetes.io/arch: arm64
       volumes:
       - name: {{ .Values.serviceSecretName }}
         csi:
@@ -84,11 +84,11 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}
 
-      # tolerations:
-      # - key: "taint-genesys"
-      #   operator: "Equal"
-      #   value: "graviton-test"
-      #   effect: "NoSchedule"
+      tolerations:
+      - key: "taint-genesys"
+        operator: "Equal"
+        value: "graviton-test"
+        effect: "NoSchedule"
       containers:
       - name: {{ .Values.serviceName }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
